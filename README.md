@@ -39,19 +39,19 @@ A modern, full-featured blog application built with **ASP.NET Core MVC** and **.
 ## 📸 Screenshots
 
 ### 🏠 Home Page
-![Home](docs/home.jpeg)
+![Home](MyMVCBlog/docs/home.jpeg)
 
 ### 📝 Posts List
-![Posts](docs/posts.jpeg)
+![Posts](MyMVCBlog/docs/posts.jpeg)
 
 ### ➕ Create Post
-![Create](docs/create.jpeg)
+![Create](MyMVCBlog/docs/create.jpeg)
 
 ### 📄 Post Details
-![Details](docs/details.jpeg)
+![Details](MyMVCBlog/docs/details.jpeg)
 
 ### 🔐 Login Page
-![Login](docs/login.jpeg)
+![Login](MyMVCBlog/docs/login.jpeg)
 
 ---
 
