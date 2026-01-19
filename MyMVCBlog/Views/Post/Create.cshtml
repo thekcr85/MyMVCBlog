@@ -1,0 +1,58 @@
+﻿@model PostViewModel
+
+@{
+    ViewData["Title"] = "Create Post";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" asp-controller="Post" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Post.Title" class="form-label"></label>
+                            <input asp-for="Post.Title" class="form-control" placeholder="Enter post title..." />
+                            <span asp-validation-for="Post.Title" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Post.CategoryId" class="form-label"></label>
+                            <select asp-for="Post.CategoryId" asp-items="Model.Categories" class="form-select">
+                                <option value="">-- Select Category --</option>
+                            </select>
+                            <span asp-validation-for="Post.CategoryId" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Post.Author" class="form-label"></label>
+                            <input asp-for="Post.Author" class="form-control" placeholder="Enter author name..." />
+                            <span asp-validation-for="Post.Author" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Post.Content" class="form-label"></label>
+                            <textarea asp-for="Post.Content" class="form-control" rows="6" placeholder="Enter post content..."></textarea>
+                            <span asp-validation-for="Post.Content" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="FeatureImage" class="form-label"></label>
+                            <input asp-for="FeatureImage" type="file" class="form-control" accept="image/*" />
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a class="btn btn-secondary" asp-action="Index" asp-controller="Post">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Create Post</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

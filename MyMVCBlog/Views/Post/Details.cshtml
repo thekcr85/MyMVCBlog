@@ -1,0 +1,128 @@
+﻿@model Post
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<style>
+    .content-wrapper {
+        padding: 20px;
+        max-width: 1000px;
+        margin: 0 auto;
+        font-family: Arial, sans-serif;
+    }
+
+    .feature-image {
+        width: 100%;
+        height: 500px;
+        margin-bottom: 20px;
+        object-fit: cover;
+    }
+</style>
+
+@if (User.IsInRole("Admin"))
+{
+    <div class="text-end">
+        <a class="btn btn-secondary" asp-action="Edit" asp-controller="Post" asp-route-id="@Model.Id">Edit Post</a>
+        <a class="btn btn-danger" asp-action="Delete" asp-controller="Post" asp-route-id="@Model.Id">Delete Post</a>
+    </div>
+}
+
+<div class="content-wrapper">
+    <h1>@Model.Title</h1>
+    <p><span class="badge bg-primary">By:</span> @Model.Author | <span class="badge bg-primary">Published on</span> @Model.PublishedDate.ToString("MMM dd yyyy")</p>
+    <p><span class="badge bg-secondary">Category</span> @Model.Category?.Name</p>
+    <img src="@Model.FeatureImagePath" alt="@Model.Title" class="feature-image" />
+    <hr />
+    <div>@Model.Content</div>
+    <hr />
+    <h3>Comments (<span id="commentsCount">@(Model.Comments?.Count ?? 0)</span>)</h3>
+    <div class="comments-section">
+        @if (Model.Comments is not null && Model.Comments.Any())
+        {
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@comment.UserName</h5>
+                        <p class="card-text text-muted">@comment.CommentDate.ToString("MMM dd yyyy HH:mm")</p>
+                        <p class="card-text">@comment.Content</p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted" id="noCommentsMsg">No comments yet. Be the first to comment!</p>
+        }
+    </div>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <h4>Add a Comment</h4>
+
+        <form id="commentForm">
+
+            <div class="form-group">
+                <label for="UserName">Name</label>
+                <input id="UserName" name="UserName" required class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="Content">Content</label>
+                <textarea id="Content" name="Content" rows="3" required class="form-control"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2 p-2 rounded">Submit Comment</button>
+
+        </form>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#commentForm').on('submit', function(event) {
+                event.preventDefault(); // Prevent traditional form submission
+
+                // Read form data into variables
+                var userName = $('#UserName').val();
+                var content = $('#Content').val();
+                var postId = @Model.Id; // Assuming you want to associate the comment with a specific post
+
+                // Send the data via AJAX
+                $.ajax({
+                    url: '@Url.Action("AddComment", "Post")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        UserName: userName,
+                        Content: content,
+                        PostId: postId // Include the post ID if needed
+                    }),
+                    success: function(response) {
+                        $('#commentForm')[0].reset(); // Reset the form
+
+                        // Remove "no comments" message if it exists
+                        $('#noCommentsMsg').remove();
+
+                        // Append the new comment to the comments section
+                        $('.comments-section').append(`
+                            <div class="card mb-3 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">${response.userName}</h5>
+                                    <p class="card-text text-muted"><small>${response.commentDate}</small></p>
+                                    <p class="card-text">${response.content}</p>
+                                </div>
+                            </div>
+                        `);
+
+                        // Update comment count
+                        var count = parseInt($('#commentsCount').text()) + 1;
+                        $('#commentsCount').text(count);
+                    }
+                });
+            });
+        });
+    </script>
+}

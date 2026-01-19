@@ -1,0 +1,45 @@
+﻿<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">My MVC Blog</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="Index" asp-controller="Home">
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="Index" asp-controller="Post">Blog</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Categories</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" asp-action="Index" asp-controller="Post" asp-route-categoryId="2">Health</a>
+                        <a class="dropdown-item" asp-action="Index" asp-controller="Post" asp-route-categoryId="3">Lifestyle</a>
+                        <a class="dropdown-item" asp-action="Index" asp-controller="Post" asp-route-categoryId="1">Technology</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" asp-action="Index" asp-controller="Post">All</a>
+                    </div>
+                </li>
+            </ul>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="ms-auto me-5">
+                    <a asp-controller="Auth" asp-action="Logout" class="btn btn-outline-light">Logout</a>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex ms-auto gap-2 me-5">
+                    <a class="btn btn-light text-primary" asp-action="Login" asp-controller="Auth">Login</a>
+                    <a class="btn btn-light text-primary" asp-action="Register" asp-controller="Auth">Register</a>
+                </div>
+            }
+
+        </div>
+    </div>
+</nav>
